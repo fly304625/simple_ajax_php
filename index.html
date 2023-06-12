@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Реєстрація</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#registrationForm').submit(function(e) {
+                e.preventDefault(); // Перехоплюємо стандартну поведінку форми
+
+                var formData = $(this).serialize(); // Збираємо дані з форми
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'process.php',
+                    data: formData,
+                    success: function(response) {
+                        // Обробка успішної відповіді
+                        if (response === 'success') {
+                            $('#registrationForm').hide();
+                            $('#successMessage').text('Ви успішно зареєстровані!').show();
+                        } else {
+                            $('#errorMessage').text(response).show();
+                        }
+                    },
+                    error: function() {
+                        // Обробка помилки
+                        $('#errorMessage').text('Сталася помилка при відправці форми. Спробуйте пізніше.').show();
+                    }
+                });
+            });
+        });
+    </script>
+    <style>
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Реєстрація</h1>
+    <form id="registrationForm" method="post">
+        <div>
+            <label for="firstName">Ім'я:</label>
+            <input type="text" id="firstName" name="firstName" required>
+        </div>
+        <div>
+            <label for="lastName">Прізвище:</label>
+            <input type="text" id="lastName" name="lastName" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="confirmPassword">Повторіть пароль:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+        </div>
+        <div>
+            <input type="submit" value="Зареєструватись">
+        </div>
+    </form>
+    <div id="successMessage" style="display: none;"></div>
+    <div id="errorMessage" class="error-message" style="display: none;"></div>
+</body>
+</html>
